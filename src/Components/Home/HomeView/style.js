@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const HomeViewContainer = styled.div`
-  width: calc(100% - 115px);
+  width: calc(100% - 120px);
   height: 100%;
   display: flex;
   flex-direction: column;

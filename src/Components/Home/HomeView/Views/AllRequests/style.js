@@ -9,19 +9,20 @@ export const ViewHeader = styled.div`
 export const ViewHeaderProgress = styled.div`
   width: 60%;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-end;
-  border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   padding: 15px;
-  flex-wrap: wrap;
+  border: 1px solid rgba(0, 0, 0, 0.2);
 `
 
 export const ProgressTitle = styled.p`
   font-size: 16px;
   font-weight: 300;
   width: 100%;
-  margin-bottom: 15px;
+  height: 30px;
+  margin-bottom: 0px;
   letter-spacing: 0.5px;
 
   b {
@@ -32,7 +33,7 @@ export const ProgressTitle = styled.p`
 
 export const ProgressBar = styled.div`
   width: calc(100% - 210px);
-  margin-right: 40px;
+  /* margin-right: 40px; */
   font-size: 14px;
   font-weight: 400;
 `
@@ -40,19 +41,19 @@ export const ProgressBar = styled.div`
 export const ProgressBarContainer = styled.div`
   height: 25px;
   border-radius: 6px;
-  background: rgba(0, 0, 0, 0.2);
   position: relative;
   overflow: hidden;
   margin-top: 5px;
+  background: rgba(0, 0, 0, 0.2);
 `
 
 export const ProgressBarFill = styled.div`
-  background: rgba(0, 0, 0, 0.3);
   position: absolute;
   left: 0;
   top: 0;
   width: 80%;
   height: 100%;
+  background: rgba(0, 0, 0, 0.3);
 `
 
 export const ProgressIndicators = styled.div`
@@ -60,12 +61,19 @@ export const ProgressIndicators = styled.div`
   display: flex;
 
   div {
-    margin-right: 15px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+
+    &:first-of-type {
+      margin-left: auto;
+    }
 
     p {
-      color: rgba(0, 0, 0, 0.8);
       font-size: 16px;
       font-weight: 300;
+      margin-bottom: 5px;
+      color: rgba(0, 0, 0, 0.8);
     }
 
     b {
@@ -77,18 +85,18 @@ export const ProgressIndicators = styled.div`
 
 export const ViewHeaderCreate = styled.div`
   text-align: center;
-  width: 20%;
+  width: calc(20% - 15px);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   padding: 15px;
   margin-left: 15px;
   cursor: pointer;
-  color: rgba(0, 0, 0, 0.7);
   transition: .2s;
+  color: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.2);
 
   &:hover {
     color: rgba(0, 0, 0, 1);
@@ -107,18 +115,18 @@ export const ViewHeaderCreate = styled.div`
 `
 
 export const ViewHeaderFilters = styled.div`
-  width: 20%;
+  width: calc(20% - 15px);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   padding: 15px;
   margin-left: 15px;
   cursor: pointer;
-  color: rgba(0, 0, 0, 0.7);
   transition: .2s;
+  color: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.2);
 
   &:hover {
     color: rgba(0, 0, 0, 1);

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const MenuContainer = styled.div`
-  width: 115px;
+  width: 120px;
   height: 100%;
   display: flex;
   flex-direction: column;

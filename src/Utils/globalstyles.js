@@ -10,12 +10,22 @@ const GlobalStyle = createGlobalStyle`
     /* font-family: 'Roboto', sans-serif; */
     font-family: 'Lexend Deca', sans-serif;
     text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  p {
+    margin-bottom: 0;
   }
 
   :root {
     --grey-light: rgb(230, 230, 230);
     --grey: #3A4D6E;
     --grey-dark: #344461;
+  }
+
+  .quill-rich-text {
+    height: 140px;
+    margin-bottom: 42px;
   }
 
   // ------ SCROLL BAR
@@ -41,6 +51,11 @@ const GlobalStyle = createGlobalStyle`
 
 export default GlobalStyle
 
-// export const SectionTitle = styled.div`
-  
-// `
+export const FixedScreen = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+`

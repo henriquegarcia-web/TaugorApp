@@ -1,10 +1,16 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import * as S from './style'
 import * as I from 'react-icons/fi'
 
 import Request from '../../../Request'
 
+import { ViewContext } from '../../../../../Contexts/ViewContext'
+
 const AllResquests = () => {
+
+  const viewContext = useContext(ViewContext)
+  const { showModal } = viewContext
+
   return (
     <>
       <S.ViewHeader>
@@ -22,17 +28,17 @@ const AllResquests = () => {
 
           <S.ProgressIndicators>
             <div>
-              <p>10</p>
-              <b>Finalizados</b>
-            </div>
-            <div>
               <p>32</p>
               <b>Na fila</b>
+            </div>
+            <div>
+              <p>10</p>
+              <b>Finalizados</b>
             </div>
           </S.ProgressIndicators>
         </S.ViewHeaderProgress>
 
-        <S.ViewHeaderCreate>
+        <S.ViewHeaderCreate onClick={() => showModal(true)}>
           <I.FiPlusCircle />
           <p>Criar Solicitação</p>
         </S.ViewHeaderCreate>

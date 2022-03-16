@@ -6,3 +6,14 @@ export const HomeContainer = styled.div`
   display: flex;
   /* border: 5px solid orange; */
 `
+
+export const ModalHeader = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+
+  svg {
+    font-size: 24px;
+    margin-right: 10px;
+  }
+`

@@ -8,7 +8,7 @@ import { ViewContext } from '../../../Contexts/ViewContext'
 const HomeView = () => {
 
   const viewContext = useContext(ViewContext)
-  const { viewComponent, setView } = viewContext
+  const { viewComponent } = viewContext
 
   return (
     <S.HomeViewContainer>

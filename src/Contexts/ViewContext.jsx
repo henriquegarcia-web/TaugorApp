@@ -7,6 +7,8 @@ export const ViewContext = createContext();
 
 const ViewProvider = ({ children }) => {
 
+  const [modalShow, setModalShow] = React.useState(false);
+
   const [view, setView] = useState('')
   const [viewComponent, setViewComponent] = useState(<AllResquests />)
 
@@ -27,11 +29,15 @@ const ViewProvider = ({ children }) => {
     mountViewComponent()
   }, [view])
 
+  const showModal = (value) => {setModalShow(value)}
+
   return (
     <ViewContext.Provider
       value={{
         viewComponent,
         setView,
+        showModal,
+        modalShow,
       }}
     >
       {children}

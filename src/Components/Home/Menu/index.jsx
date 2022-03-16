@@ -7,7 +7,7 @@ import { ViewContext } from '../../../Contexts/ViewContext'
 const Menu = () => {
 
   const viewContext = useContext(ViewContext)
-  const { setView } = viewContext
+  const { setView, showModal } = viewContext
 
   return (
     <S.MenuContainer>
@@ -27,7 +27,7 @@ const Menu = () => {
           <S.MenuNavBarItemText><b>Minhas</b> Solicitações</S.MenuNavBarItemText>
         </S.MenuNavBarItem>
 
-        <S.MenuNavBarItem>
+        <S.MenuNavBarItem onClick={() => showModal(true)}>
           <I.FiPlusCircle />
           <S.MenuNavBarItemText><b>Criar</b> Solicitação</S.MenuNavBarItemText>
         </S.MenuNavBarItem>

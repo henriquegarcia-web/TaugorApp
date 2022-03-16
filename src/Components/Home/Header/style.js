@@ -63,3 +63,8 @@ export const UserInfoName = styled.div`
   font-size: 16px;
   font-weight: 300;
 `
+
+export const HeaderUserInfoModal = styled.div`
+  width: 160px;
+  padding: 15px;
+`
