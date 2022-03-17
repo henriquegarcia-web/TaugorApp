@@ -62,6 +62,7 @@ export const UserInfoImage = styled.img`
 export const UserInfoName = styled.div`
   font-size: 16px;
   font-weight: 300;
+  text-transform: capitalize;
 `
 
 export const HeaderUserInfoModal = styled.div`

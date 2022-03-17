@@ -1,36 +1,63 @@
 import React, { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+
 import * as S from './style'
 import * as I from 'react-icons/fi'
 import * as MUI from '@mui/material/'
+import { AuthErrorMessage } from '../../Utils/globalstyles'
 
 import AuthHeader from '../../Components/Auth/AuthHeader'
 
 import { useAuth } from '../../Contexts/AuthContext'
+import VerifyErroCode from '../../Services/Auth'
 
 const Login = () => {
 
   const navigate = useNavigate();
 
-  const { values, showPassword, handleMouseDownPassword, handleLogin, resetAuth } = useAuth()
+  const { 
+    handleLogin, 
+    passwordStates, 
+    showPassword,
+    resetPasswordStates,
+    setError,
+    errorMessage,
+  } = useAuth()
 
   const emailRef = useRef();
   const passwordRef = useRef();
 
-  useEffect(() => {
-    resetAuth()
-  }, [])
-
+  // ----------------------------------------------- SUBMIT
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (emailRef.current.value === '' || passwordRef.current.value === '') {
+      return setError('Todos os campos devem ser preenchidos');
+    }
+    
     try {
       await handleLogin(emailRef.current.value, passwordRef.current.value);
       navigate('/', { replace: true });
     } catch (error) {
-      console.log(error.message);
+      const errorText = VerifyErroCode(error.message)
+      setError(errorText)
     }
   }
+
+  const handleEnterSubmit = (e) => {
+    if(e.key === 'Enter'){
+      handleSubmit(e)
+    }
+  }
+
+  // ----------------------------------------------- FUNCIONALIDADE DO INPUT SENHA
+
+  useEffect(() => {
+    resetPasswordStates()
+  }, [])
+
+  // -----------------------------------------------
 
   return (
     <S.LoginPage>
@@ -40,9 +67,8 @@ const Login = () => {
 
         <S.LoginForm>
           <MUI.TextField
-            // required
             inputRef={emailRef}
-            // onChange={handleChange('email')}
+            onKeyPress={handleEnterSubmit}
             label="Seu e-mail" 
             variant="outlined" 
             size="small"
@@ -57,30 +83,31 @@ const Login = () => {
             size="small"
             style={{
               width: 'calc(100% - 50px)',
-              marginBottom: '30px',
+              marginBottom: '10px',
             }}
           >
             <MUI.InputLabel htmlFor="login-input-password">Sua senha</MUI.InputLabel>
             <MUI.OutlinedInput
               inputRef={passwordRef}
+              onKeyPress={handleEnterSubmit}
               id="login-input-password"
-              type={values.showPassword ? 'text' : 'password'}
-              // onChange={handleChange('password')}
+              type={passwordStates.showPassword ? 'text' : 'password'}
               endAdornment={
                 <MUI.InputAdornment position="end">
                   <MUI.IconButton
                     aria-label="toggle password visibility"
-                    onClick={showPassword}
-                    onMouseDown={handleMouseDownPassword}
+                    onClick={(e) => showPassword(e)}
                     edge="end"
                   >
-                    {values.showPassword ? <I.FiEyeOff /> : <I.FiEye />}
+                    {passwordStates.showPassword ? <I.FiEyeOff /> : <I.FiEye />}
                   </MUI.IconButton>
                 </MUI.InputAdornment>
               }
               label="Password"
             />
           </MUI.FormControl>
+
+          <AuthErrorMessage>{errorMessage}</AuthErrorMessage>
 
           <MUI.Button 
             variant="outlined"

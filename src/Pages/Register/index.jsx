@@ -1,42 +1,74 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useLayoutEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+
 import * as S from './style'
 import * as I from 'react-icons/fi'
 import * as MUI from '@mui/material/'
+import { AuthErrorMessage } from '../../Utils/globalstyles'
 
 import AuthHeader from '../../Components/Auth/AuthHeader'
-
 import { useAuth } from '../../Contexts/AuthContext'
+import VerifyErroCode from '../../Services/Auth'
 
 const Register = () => {
 
   const navigate = useNavigate();
 
-  const { values, showPassword, showConfirmPassword, handleMouseDownPassword, handleRegister, resetAuth } = useAuth()
+  const { 
+    handleRegister, 
+    passwordStates, 
+    showPassword, 
+    showConfirmPassword, 
+    resetPasswordStates,
+    setError,
+    errorMessage,
+  } = useAuth()
 
   const nameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
 
-  useEffect(() => {
-    resetAuth()
-  }, [])
-
+  // ----------------------------------------------- SUBMIT
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-      return console.log('ERRO: Senhas não conferem');
+      return setError('As senhas não conferem');
+    }
+
+    if (
+      nameRef.current.value === '' || 
+      emailRef.current.value === '' ||
+      passwordRef.current.value === '' || 
+      passwordConfirmRef.current.value === ''
+    ) {
+      return setError('Todos os campos devem ser preenchidos');
     }
 
     try {
-      await handleRegister(emailRef.current.value, passwordRef.current.value);
+      await handleRegister(emailRef.current.value, passwordRef.current.value, nameRef.current.value);
       navigate('/', { replace: true });
     } catch (error) {
-      console.log(error.message);
+      const errorText = VerifyErroCode(error.message)
+      setError(errorText)
     }
   }
+  
+  const handleEnterSubmit = (e) => {
+    if(e.key === 'Enter'){
+      handleSubmit(e)
+    }
+  }
+  
+  // ----------------------------------------------- FUNCIONALIDADE DO INPUT SENHA
+
+  useLayoutEffect(() => {
+    resetPasswordStates()
+  }, [])
+
+  // -----------------------------------------------
 
   return (
     <S.RegisterPage>
@@ -49,6 +81,7 @@ const Register = () => {
           {/* ---------------------- NOME ---------------------- */}
           <MUI.TextField
             inputRef={nameRef}
+            onKeyPress={handleEnterSubmit}
             label="Seu nome completo" 
             variant="outlined" 
             size="small"
@@ -61,6 +94,7 @@ const Register = () => {
           {/* ---------------------- E-MAIL ---------------------- */}
           <MUI.TextField
             inputRef={emailRef}
+            onKeyPress={handleEnterSubmit}
             label="Seu e-mail" 
             variant="outlined" 
             size="small"
@@ -82,17 +116,17 @@ const Register = () => {
             <MUI.InputLabel htmlFor="register-input-password">Sua senha</MUI.InputLabel>
             <MUI.OutlinedInput
               inputRef={passwordRef}
+              onKeyPress={handleEnterSubmit}
               id="register-input-password"
-              type={values.showPassword ? 'text' : 'password'}
+              type={passwordStates.showPassword ? 'text' : 'password'}
               endAdornment={
                 <MUI.InputAdornment position="end">
                   <MUI.IconButton
                     aria-label="toggle password visibility"
-                    onClick={showPassword}
-                    onMouseDown={handleMouseDownPassword}
+                    onClick={(e) => showPassword(e)}
                     edge="end"
                   >
-                    {values.showPassword ? <I.FiEyeOff /> : <I.FiEye />}
+                    {passwordStates.showPassword ? <I.FiEyeOff /> : <I.FiEye />}
                   </MUI.IconButton>
                 </MUI.InputAdornment>
               }
@@ -106,29 +140,30 @@ const Register = () => {
             size="small"
             style={{
               width: 'calc(100% - 50px)',
-              marginBottom: '30px',
+              marginBottom: '10px',
             }}
           >
             <MUI.InputLabel htmlFor="register-input-password-confirm">Confirme sua senha</MUI.InputLabel>
             <MUI.OutlinedInput
               inputRef={passwordConfirmRef}
               id="register-input-password-confirm"
-              type={values.showConfirmPassword ? 'text' : 'password'}
+              type={passwordStates.showConfirmPassword ? 'text' : 'password'}
               endAdornment={
                 <MUI.InputAdornment position="end">
                   <MUI.IconButton
                     aria-label="toggle password visibility"
-                    onClick={showConfirmPassword}
-                    onMouseDown={handleMouseDownPassword}
+                    onClick={(e) => showConfirmPassword(e)}
                     edge="end"
                   >
-                    {values.showConfirmPassword ? <I.FiEyeOff /> : <I.FiEye />}
+                    {passwordStates.showConfirmPassword ? <I.FiEyeOff /> : <I.FiEye />}
                   </MUI.IconButton>
                 </MUI.InputAdornment>
               }
               label="Password"
             />
           </MUI.FormControl>
+
+          <AuthErrorMessage>{errorMessage}</AuthErrorMessage>
 
           <MUI.Button 
             variant="outlined"

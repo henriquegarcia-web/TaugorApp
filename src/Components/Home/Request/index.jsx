@@ -2,14 +2,14 @@ import React from 'react'
 import * as S from './style'
 
 import {
-  FiBox, // Product
-  FiBookmark, // Category
-  FiStar, // Priority
-  FiActivity, // Stats
-  FiUsers, // Impacted Users
+  FiBox, // Produto
+  FiBookmark, // Categoria
+  FiStar, // Prioridade
+  FiActivity, // Status
+  FiUsers, // Usuários Impactados
 } from 'react-icons/fi'
 
-import UserImage from '../../../Assets/UserImage.jpeg'
+// import UserImage from '../../../Assets/UserImage.png'
 
 const Request = () => {
   return (

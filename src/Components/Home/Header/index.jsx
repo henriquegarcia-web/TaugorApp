@@ -1,16 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as S from './style'
 import * as I from 'react-icons/fi'
 import * as MUI from '@mui/material/'
 
-import { HandleLogout } from '../../../Contexts/AuthContext'
+import { HandleLogout, useAuth } from '../../../Contexts/AuthContext'
 
-import UserImage from '../../../Assets/UserImage.jpeg'
+import UserImage from '../../../Assets/UserImage.png'
 
 const Header = () => {
 
   const navigate = useNavigate()
+  const { getUser } = useAuth()
+
+  const user = getUser()
+  
+  // ---------------------------------------------- FUNÇÃO DE SIGNUP
+
+  const handleExitApp = () => {
+    HandleLogout()
+    navigate('/login')
+  }
+
+  // ---------------------------------------------- POPOVER
 
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -25,10 +37,7 @@ const Header = () => {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
-  const handleExitApp = () => {
-    HandleLogout()
-    navigate('/login')
-  }
+  // ----------------------------------------------
 
   return (
     <S.HeaderContainer>
@@ -47,7 +56,7 @@ const Header = () => {
           <S.UserInfoImage src={UserImage} alt="" />
         </S.UserInfoImageContainer>
 
-        <S.UserInfoName>Henrique Garcia</S.UserInfoName>
+        <S.UserInfoName>{user?.displayName}</S.UserInfoName>
       </S.HeaderUserInfo>
 
       <MUI.Popover 

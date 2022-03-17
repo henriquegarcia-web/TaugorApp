@@ -1,100 +1,122 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
+  updateProfile,
 } from 'firebase/auth';
 import { auth } from '../firebase'
 
 const AuthContext = createContext();
+
 export function useAuth() {
   return useContext(AuthContext);
 }
 
 const AuthProvider = ({ children }) => {
 
-  const [values, setValues] = React.useState({
+  // ----------------------------------------------- FUNCIONALIDADE DO INPUT SENHA 1
+
+  const [passwordStates, setPasswordStates] = React.useState({
     showPassword: false,
     showConfirmPassword: false,
   });
 
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
+  // ----------------------------------------------- FUNCIONALIDADES DO FIREBASE
 
-  const [user, setUser] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
+  const [errorMessage, setErrorMessage] = useState('');
   
-  onAuthStateChanged(auth, (currentUser) => {
-    setUser(currentUser);
-  });
-
-  const handleRegister = async (email, password) => {
-    const user = await createUserWithEmailAndPassword(
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+    })
+  }, []);
+  
+  const handleRegister = async (email, password, name) => {
+    await createUserWithEmailAndPassword(
       auth,
       email,
       password
-    );
-    setUser(user)
+    )
+    await updateProfile(auth.currentUser, { displayName: name })
   };
 
   const handleLogin = async (email, password) => {
-    const user = await signInWithEmailAndPassword(
+    await signInWithEmailAndPassword(
       auth,
       email,
       password
     );
-    setUser(user)
   };
 
-  const resetAuth = () => {
-    setValues({
+  const getUser = () => {
+    return auth.currentUser;
+  }
+
+  const setError = (errorMessage) => {
+    console.log(errorMessage)
+    setErrorMessage(errorMessage)
+    setTimeout(() => {
+      setErrorMessage('')
+    }, 6000);
+  }
+
+  // ----------------------------------------------- FUNCIONALIDADE DO INPUT SENHA 2
+
+  const handleChange = (prop) => (event) => {
+    setPasswordStates({ ...passwordStates, [prop]: event.target.value });
+  };
+  
+  const resetPasswordStates = () => {
+    setPasswordStates({
       showPassword: false,
       showConfirmPassword: false,
     })
   }  
-  
-  // ------------------------------------------ FUNCIONAMENTO DO INPUT SENHA
 
-  const showPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
+  const showPassword = (e) => {
+    e.preventDefault();
+    setPasswordStates({
+      ...passwordStates,
+      showPassword: !passwordStates.showPassword,
     });
   };
 
-  const showConfirmPassword = () => {
-    setValues({
-      ...values,
-      showConfirmPassword: !values.showConfirmPassword,
+  const showConfirmPassword = (e) => {
+    e.preventDefault();
+    setPasswordStates({
+      ...passwordStates,
+      showConfirmPassword: !passwordStates.showConfirmPassword,
     });
   };
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+  // -----------------------------------------------
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        values,
-        handleChange,
-        showPassword,
-        showConfirmPassword,
-        handleMouseDownPassword,
-        handleRegister,
-        handleLogin,
-        resetAuth,
-      }}
-    >
+    <AuthContext.Provider value={{
+      currentUser,
+      getUser,
+      passwordStates,
+      handleChange,
+      showPassword,
+      showConfirmPassword,
+      handleRegister,
+      handleLogin,
+      resetPasswordStates,
+      setError,
+      errorMessage,
+    }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
 export default AuthProvider;
+
+// ----------------------------------------------- FUNÇÃO DE LOGOUT
 
 export const HandleLogout = async () => {
   await signOut(auth);
