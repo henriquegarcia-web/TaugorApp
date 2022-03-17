@@ -57,7 +57,6 @@ const AuthProvider = ({ children }) => {
   }
 
   const setError = (errorMessage) => {
-    console.log(errorMessage)
     setErrorMessage(errorMessage)
     setTimeout(() => {
       setErrorMessage('')

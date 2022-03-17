@@ -107,7 +107,7 @@ const Login = () => {
             />
           </MUI.FormControl>
 
-          <AuthErrorMessage>{errorMessage}</AuthErrorMessage>
+          <AuthErrorMessage margin='20px'>{errorMessage}</AuthErrorMessage>
 
           <MUI.Button 
             variant="outlined"

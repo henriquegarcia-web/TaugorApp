@@ -10,6 +10,9 @@ import AuthHeader from '../../Components/Auth/AuthHeader'
 import { useAuth } from '../../Contexts/AuthContext'
 import VerifyErroCode from '../../Services/Auth'
 
+import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { db } from '../../firebase';
+
 const Register = () => {
 
   const navigate = useNavigate();
@@ -22,6 +25,7 @@ const Register = () => {
     resetPasswordStates,
     setError,
     errorMessage,
+    getUser,
   } = useAuth()
 
   const nameRef = useRef();
@@ -163,7 +167,7 @@ const Register = () => {
             />
           </MUI.FormControl>
 
-          <AuthErrorMessage>{errorMessage}</AuthErrorMessage>
+          <AuthErrorMessage margin='20px'>{errorMessage}</AuthErrorMessage>
 
           <MUI.Button 
             variant="outlined"

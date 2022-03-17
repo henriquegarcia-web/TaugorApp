@@ -64,7 +64,7 @@ export const AuthErrorMessage = styled.div`
   font-size: 13px;
   font-size: 300;
   text-align: right;
-  margin-bottom: 20px;
+  margin-bottom: ${props => props.margin};
   height: 20px;
   line-height: 14px;
 
