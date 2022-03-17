@@ -1,37 +1,20 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useContext, useEffect } from 'react'
 import * as S from './style'
 import * as I from 'react-icons/fi'
 import * as MUI from '@mui/material/'
 
 import AuthHeader from '../../Components/Auth/AuthHeader'
 
+import { AuthContext } from '../../Contexts/AuthContext'
+
 const Login = () => {
 
-  const navigate = useNavigate()
+  const authContext = useContext(AuthContext)
+  const { values, handleChange, showPassword, handleMouseDownPassword, handleLogin, resetAuth } = authContext
 
-  const [values, setValues] = React.useState({
-    showPassword: false,
-  });
-
-  const handleChange = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
-  };
-
-  const handleClickShowPassword = () => {
-    setValues({
-      ...values,
-      showPassword: !values.showPassword,
-    });
-  };
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
-  const handleLoginUser = () => {
-    navigate('/home')
-  }
+  useEffect(() => {
+    resetAuth()
+  }, [])
 
   return (
     <S.LoginPage>
@@ -42,6 +25,8 @@ const Login = () => {
 
         <S.LoginForm>
           <MUI.TextField
+            value={values.email}
+            onChange={handleChange('email')}
             label="Seu e-mail" 
             variant="outlined" 
             size="small"
@@ -69,7 +54,7 @@ const Login = () => {
                 <MUI.InputAdornment position="end">
                   <MUI.IconButton
                     aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
+                    onClick={showPassword}
                     onMouseDown={handleMouseDownPassword}
                     edge="end"
                   >
@@ -83,7 +68,7 @@ const Login = () => {
 
           <MUI.Button 
             variant="outlined"
-            onClick={() => handleLoginUser()}
+            onClick={handleLogin}
           >
             Entrar
           </MUI.Button>

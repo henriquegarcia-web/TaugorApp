@@ -7,6 +7,7 @@ import Register from './Pages/Register';
 import PageNotFound from './Pages/PageNotFound';
 
 import ViewProvider from './Contexts/ViewContext';
+import AuthProvider from './Contexts/AuthContext';
 
 function App() {
   return (
@@ -17,8 +18,8 @@ function App() {
           <Route path='/' exact element={<ViewProvider><Home /></ViewProvider>} />
           <Route path='/home' element={<ViewProvider><Home /></ViewProvider>} />
 
-          <Route path='/login' element={<Login />} />
-          <Route path='/registro' element={<Register />} />
+          <Route path='/login' element={<AuthProvider><Login /></AuthProvider>} />
+          <Route path='/registro' element={<AuthProvider><Register /></AuthProvider>} />
 
           <Route path='*' element={<PageNotFound />} />
 

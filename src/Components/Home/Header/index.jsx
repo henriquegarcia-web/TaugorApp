@@ -4,6 +4,8 @@ import * as S from './style'
 import * as I from 'react-icons/fi'
 import * as MUI from '@mui/material/'
 
+import { HandleLogout } from '../../../Contexts/AuthContext'
+
 import UserImage from '../../../Assets/UserImage.jpeg'
 
 const Header = () => {
@@ -24,6 +26,7 @@ const Header = () => {
   const id = open ? 'simple-popover' : undefined;
 
   const handleExitApp = () => {
+    HandleLogout()
     navigate('/login')
   }
 
@@ -31,7 +34,11 @@ const Header = () => {
     <S.HeaderContainer>
 
       <S.HeaderSearch>
-        <S.HeaderSearchInput type="text" placeholder='Procure por palavras-chaves ...' />
+        <S.HeaderSearchInput 
+          type="text"
+          placeholder='Procure por palavras-chaves ...'
+          onChange={() => {}}
+        />
         <I.FiSearch />
       </S.HeaderSearch>
 
