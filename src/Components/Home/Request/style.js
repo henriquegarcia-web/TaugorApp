@@ -43,14 +43,13 @@ export const RequestHeader = styled.div`
     align-items: center;
 
     &:first-of-type {
-      width: 100%;
       max-width: 120px;
     }
 
     svg {
       font-size: 16px;
       margin-right: 8px;
-      color: var(--grey-light);
+      color: var(--grey);
     }
 
     p {
@@ -101,8 +100,8 @@ export const RequestMainInfos = styled.div`
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    line-height: 18px;
-    max-height: 18px;
+    line-height: 20px;
+    max-height: 20px;
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
   }
@@ -147,7 +146,7 @@ export const RequestDetails = styled.div`
 
     svg {
       margin-right: 8px;
-      color: var(--grey-light);
+      color: var(--grey);
     }
 
     p {
