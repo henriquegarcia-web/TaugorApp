@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   createUserWithEmailAndPassword,
@@ -6,17 +6,16 @@ import {
   onAuthStateChanged,
   signOut,
 } from 'firebase/auth';
-import { auth } from '../firebase-config'
+import { auth } from '../firebase'
 
-export const AuthContext = createContext();
+const AuthContext = createContext();
+export function useAuth() {
+  return useContext(AuthContext);
+}
 
 const AuthProvider = ({ children }) => {
 
-  const navigate = useNavigate()
-
   const [values, setValues] = React.useState({
-    email: '',
-    password: '',
     showPassword: false,
     showConfirmPassword: false,
   });
@@ -31,44 +30,32 @@ const AuthProvider = ({ children }) => {
     setUser(currentUser);
   });
 
-  const handleRegister = async () => {
-    try {
-      const user = await createUserWithEmailAndPassword(
-        auth,
-        values.email,
-        values.password
-      );
-      navigate('/home');
-      console.log(user);
-    } catch (error) {
-      console.log(error.message);
-    }
+  const handleRegister = async (email, password) => {
+    const user = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    setUser(user)
   };
 
-  const handleLogin = async () => {
-    try {
-      const user = await signInWithEmailAndPassword(
-        auth,
-        values.email,
-        values.password
-      );
-      navigate('/home');
-      console.log(user);
-    } catch (error) {
-      console.log(error.message);
-    }
+  const handleLogin = async (email, password) => {
+    const user = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    setUser(user)
   };
 
   const resetAuth = () => {
     setValues({
-      email: '',
-      password: '',
       showPassword: false,
       showConfirmPassword: false,
     })
   }  
   
-  // ------------------------------------------ SENHA
+  // ------------------------------------------ FUNCIONAMENTO DO INPUT SENHA
 
   const showPassword = () => {
     setValues({
@@ -91,6 +78,7 @@ const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider
       value={{
+        user,
         values,
         handleChange,
         showPassword,

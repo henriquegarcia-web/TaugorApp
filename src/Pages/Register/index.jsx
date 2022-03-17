@@ -1,20 +1,42 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import * as S from './style'
 import * as I from 'react-icons/fi'
 import * as MUI from '@mui/material/'
 
 import AuthHeader from '../../Components/Auth/AuthHeader'
 
-import { AuthContext } from '../../Contexts/AuthContext'
+import { useAuth } from '../../Contexts/AuthContext'
 
 const Register = () => {
 
-  const authContext = useContext(AuthContext)
-  const { values, handleChange, showPassword, showConfirmPassword, handleMouseDownPassword, handleRegister, resetAuth } = authContext
+  const navigate = useNavigate();
+
+  const { values, showPassword, showConfirmPassword, handleMouseDownPassword, handleRegister, resetAuth } = useAuth()
+
+  const nameRef = useRef();
+  const emailRef = useRef();
+  const passwordRef = useRef();
+  const passwordConfirmRef = useRef();
 
   useEffect(() => {
     resetAuth()
   }, [])
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+      return console.log('ERRO: Senhas não conferem');
+    }
+
+    try {
+      await handleRegister(emailRef.current.value, passwordRef.current.value);
+      navigate('/', { replace: true });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
   return (
     <S.RegisterPage>
@@ -24,10 +46,21 @@ const Register = () => {
         <AuthHeader type='register' />
 
         <S.RegisterForm>
+          {/* ---------------------- NOME ---------------------- */}
+          <MUI.TextField
+            inputRef={nameRef}
+            label="Seu nome completo" 
+            variant="outlined" 
+            size="small"
+            fullWidth
+            style={{
+              marginBottom: '15px',
+            }}
+          />
+
           {/* ---------------------- E-MAIL ---------------------- */}
           <MUI.TextField
-            value={values.email}
-            onChange={handleChange('email')}
+            inputRef={emailRef}
             label="Seu e-mail" 
             variant="outlined" 
             size="small"
@@ -48,10 +81,9 @@ const Register = () => {
           >
             <MUI.InputLabel htmlFor="register-input-password">Sua senha</MUI.InputLabel>
             <MUI.OutlinedInput
+              inputRef={passwordRef}
               id="register-input-password"
               type={values.showPassword ? 'text' : 'password'}
-              value={values.password}
-              onChange={handleChange('password')}
               endAdornment={
                 <MUI.InputAdornment position="end">
                   <MUI.IconButton
@@ -79,6 +111,7 @@ const Register = () => {
           >
             <MUI.InputLabel htmlFor="register-input-password-confirm">Confirme sua senha</MUI.InputLabel>
             <MUI.OutlinedInput
+              inputRef={passwordConfirmRef}
               id="register-input-password-confirm"
               type={values.showConfirmPassword ? 'text' : 'password'}
               endAdornment={
@@ -99,7 +132,7 @@ const Register = () => {
 
           <MUI.Button 
             variant="outlined"
-            onClick={handleRegister}
+            onClick={handleSubmit}
           >
             Registrar
           </MUI.Button>

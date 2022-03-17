@@ -1,32 +1,48 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import * as S from './style'
 import * as I from 'react-icons/fi'
 import * as MUI from '@mui/material/'
 
 import AuthHeader from '../../Components/Auth/AuthHeader'
 
-import { AuthContext } from '../../Contexts/AuthContext'
+import { useAuth } from '../../Contexts/AuthContext'
 
 const Login = () => {
 
-  const authContext = useContext(AuthContext)
-  const { values, handleChange, showPassword, handleMouseDownPassword, handleLogin, resetAuth } = authContext
+  const navigate = useNavigate();
+
+  const { values, showPassword, handleMouseDownPassword, handleLogin, resetAuth } = useAuth()
+
+  const emailRef = useRef();
+  const passwordRef = useRef();
 
   useEffect(() => {
     resetAuth()
   }, [])
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await handleLogin(emailRef.current.value, passwordRef.current.value);
+      navigate('/', { replace: true });
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   return (
     <S.LoginPage>
-      
       <S.Login>
         
         <AuthHeader type='login' />
 
         <S.LoginForm>
           <MUI.TextField
-            value={values.email}
-            onChange={handleChange('email')}
+            // required
+            inputRef={emailRef}
+            // onChange={handleChange('email')}
             label="Seu e-mail" 
             variant="outlined" 
             size="small"
@@ -46,10 +62,10 @@ const Login = () => {
           >
             <MUI.InputLabel htmlFor="login-input-password">Sua senha</MUI.InputLabel>
             <MUI.OutlinedInput
+              inputRef={passwordRef}
               id="login-input-password"
               type={values.showPassword ? 'text' : 'password'}
-              value={values.password}
-              onChange={handleChange('password')}
+              // onChange={handleChange('password')}
               endAdornment={
                 <MUI.InputAdornment position="end">
                   <MUI.IconButton
@@ -68,7 +84,7 @@ const Login = () => {
 
           <MUI.Button 
             variant="outlined"
-            onClick={handleLogin}
+            onClick={handleSubmit}
           >
             Entrar
           </MUI.Button>
