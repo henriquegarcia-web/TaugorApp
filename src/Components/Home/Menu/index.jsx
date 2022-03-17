@@ -2,12 +2,11 @@ import React, { useContext } from 'react'
 import * as S from './style'
 import * as I from 'react-icons/fi'
 
-import { ViewContext } from '../../../Contexts/ViewContext'
+import { useView } from '../../../Contexts/ViewContext'
 
 const Menu = () => {
 
-  const viewContext = useContext(ViewContext)
-  const { setView, showModal } = viewContext
+  const { setView, showModal } = useView()
 
   return (
     <S.MenuContainer>

@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const HeaderContainer = styled.div`
   width: 100%;
   height: 60px;
-  border: 1px solid var(--grey-light);
+  border: 1px solid var(--grey-white);
   border-left: none;
   display: flex;
   justify-content: space-between;
@@ -29,7 +29,7 @@ export const HeaderSearch = styled.div`
 
 export const HeaderSearchInput = styled.input`
   border-radius: 10px;
-  border: 1px solid var(--grey-light);
+  border: 1px solid var(--grey-white);
   width: 100%;
   height: 100%;
   padding: 0 40px 0 15px;
@@ -40,7 +40,7 @@ export const HeaderSearchInput = styled.input`
 export const HeaderUserInfo = styled.div`
   display: flex;
   align-items: center;
-  border-left: 1px solid var(--grey-light);
+  border-left: 1px solid var(--grey-white);
   padding-left: 15px;
   cursor: pointer;
 `

@@ -12,6 +12,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { db, storage } from '../../../firebase'
 import { useAuth } from '../../../Contexts/AuthContext'
 import { AuthErrorMessage } from '../../../Utils/globalstyles'
+import { useView } from '../../../Contexts/ViewContext'
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -19,7 +20,8 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 const RequestModal = (props) => {
 
-  const { getUser, setError, errorMessage, } = useAuth()
+  const { getUser, setError, errorMessage } = useAuth()
+  const { requestsList, updateRequests } = useView()
 
   const [description, setDescription] = useState('');
   const [operationStatus, setOperationStatus] = useState('');
@@ -96,9 +98,14 @@ const RequestModal = (props) => {
     if (validationForm() && indexedFileInput) {
 
       const currentUser = getUser()
+      const requestsLength = requestsList.length
 
       await addDoc(collection(db, "requests"), {
-        created_by: currentUser.uid,
+        id: requestsLength + 1,
+        created_by: {
+          user_uid: currentUser.uid,
+          user_name: currentUser.displayName
+        },
         title: requestTitleRef.current.value,
         description: description,
         product: requestProductRef.current.value,
@@ -107,15 +114,19 @@ const RequestModal = (props) => {
         problem: requestProblemRef.current.value,
         impacted_users: impactedUsers,
         file: indexedFileInput,
+        edit_history: {
+          created_at: new Date(),
+          update_at: ''
+        }
       })
       .then(() => {
         setAlertOpen(true)
-        // console.log('Data saved successfully!')
       })
       .catch((error) => {
-        console.log('The write failed...')
+        console.log('Falha ao realizar requisição')
       });
 
+      updateRequests()
       clearInputs()
       props.onHide();
     }    

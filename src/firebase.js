@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from "firebase/firestore";
+import { collection, getDocs, getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
@@ -17,3 +17,15 @@ const app = initializeApp(firebaseConfig);
 export const storage = getStorage(app);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+
+export const GetRequestsList = async () => {
+  const requestsRef = collection(db, 'requests');
+  const crequestsSnapshot = await getDocs(requestsRef);
+  const requestsList = crequestsSnapshot.docs.map(doc => doc.data());
+
+  return requestsList;
+}
+
+export const GetUser = () => {
+  return auth.currentUser
+}

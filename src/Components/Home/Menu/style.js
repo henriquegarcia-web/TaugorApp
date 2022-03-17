@@ -12,7 +12,7 @@ export const MenuLogo = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid var(--grey-light);
+  border: 1px solid var(--grey-white);
 
   svg {
     font-size: 32px;

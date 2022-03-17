@@ -44,16 +44,16 @@ export const ProgressBarContainer = styled.div`
   position: relative;
   overflow: hidden;
   margin-top: 5px;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.12);
 `
 
 export const ProgressBarFill = styled.div`
   position: absolute;
   left: 0;
   top: 0;
-  width: 80%;
+  width: ${props => props.fill}px;
   height: 100%;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--grey-light);
 `
 
 export const ProgressIndicators = styled.div`

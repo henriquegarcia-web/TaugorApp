@@ -1,43 +1,79 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
-import AllResquests from "../Components/Home/HomeView/Views/AllRequests";
-import MyRequests from "../Components/Home/HomeView/Views/MyRequests";
+import { GetRequestsList, GetUser } from "../firebase";
 
 export const ViewContext = createContext();
+
+export function useView() {
+  return useContext(ViewContext);
+}
 
 const ViewProvider = ({ children }) => {
 
   const [modalShow, setModalShow] = React.useState(false);
 
-  const [view, setView] = useState('')
-  const [viewComponent, setViewComponent] = useState(<AllResquests />)
+  const [view, setView] = useState('all_requests')
 
-  const mountViewComponent = () => {
-    switch (view) {
-      case 'all_requests':
-        setViewComponent(<AllResquests />)
-        break;
-      case 'my_requests':
-        setViewComponent(<MyRequests />)
-        break;
-      default:
-        break;
-    }
+  const getAllRequestsList = async () => {
+    let allRequestsNum
+    let finalizedRequestsNum = 0
+
+    const allRequests = await GetRequestsList()
+    allRequestsNum = allRequests.length
+
+    Array.from(allRequests).map(({ status }) => {
+      if (status === 'finalizado') {
+        finalizedRequestsNum += 1
+      }
+    })
+
+    const progress = ({
+      all: allRequestsNum,
+      finished: finalizedRequestsNum,
+      percentage: 100/finalizedRequestsNum
+    })
+
+    return ({ progress, allRequests })
   }
 
-  useEffect(() => {
-    mountViewComponent()
-  }, [view])
+  const getMyRequestsList = async () => {
+    let myRequestsNum = 0
+    let finalizedRequestsNum = 0
+
+    const allRequests = await GetRequestsList()
+    let myRequests = []
+
+    Array.from(allRequests).map((request) => {
+      if (request.created_by.user_uid === GetUser().uid) {
+        myRequestsNum += 1
+        myRequests.push(request)
+
+        if (request.status === 'finalizado') {
+          finalizedRequestsNum += 1
+        }
+      }
+    })
+
+    const progress = ({
+      all: myRequestsNum,
+      finished: finalizedRequestsNum,
+      percentage: 100/finalizedRequestsNum
+    })
+
+    return ({ progress, allRequests: myRequests })
+  }
 
   const showModal = (value) => {setModalShow(value)}
 
   return (
     <ViewContext.Provider
       value={{
-        viewComponent,
+        view,
         setView,
         showModal,
         modalShow,
+        getAllRequestsList,
+        getMyRequestsList,
       }}
     >
       {children}

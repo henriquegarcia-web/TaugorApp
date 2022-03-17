@@ -1,58 +1,81 @@
 import React from 'react'
 import * as S from './style'
+import * as I from 'react-icons/fi'
 
-import {
-  FiBox, // Produto
-  FiBookmark, // Categoria
-  FiStar, // Prioridade
-  FiActivity, // Status
-  FiUsers, // Usuários Impactados
-} from 'react-icons/fi'
+import UserImage from '../../../Assets/UserImage.png'
 
-// import UserImage from '../../../Assets/UserImage.png'
+const Request = ({ data }) => {
 
-const Request = () => {
+  var description = data.description.replace(/<[^>]+>/g, '');
+
+  const status = ( data.status === 'pendente'
+    ? 'Pendente'
+    : data.status === 'em_andamento'
+    ? 'Em andamento'
+    : data.status === 'finalizado'
+    ? 'Finalizada'
+    : 'Operação parada'
+  )
+
+  const priority = ( data.priority === 'baixa'
+    ? 'Baixa'
+    : data.priority === 'media'
+    ? 'Média'
+    : 'Alta'
+  )
+
+  const impactedUsers = ( data.impacted_users === 1
+    ? 'Apenas 1'
+    : data.impacted_users === 2
+    ? '1 a 10 usuários'
+    : data.impacted_users === 3
+    ? '11 a 30 usuários'
+    : data.impacted_users === 4
+    ? '31 a 50 usuários'
+    : 'Mais de 50 usuários'
+  )
+
   return (
     <S.Request>
 
       <S.ResquestIdentifier>
-        <p>Request #0001</p>
+        <p>Request #{data.id}</p>
       </S.ResquestIdentifier>
 
       <S.RequestContainer>
 
         <S.RequestHeader>
           <S.RequestProduct>
-            <FiBox />
-            <p>Website E-commerce</p>
+            <I.FiBox />
+            <p>{data.product}</p>
           </S.RequestProduct>
-          <S.RequestCategory>
-            <FiBookmark />
-            <p></p>
-          </S.RequestCategory>
           <S.RequestPriority>
-            <FiStar />
-            <p></p>
+            <I.FiStar />
+            <p>{priority}</p>
           </S.RequestPriority>
+          <S.RequestImpactedUsers>
+            <I.FiUsers />
+            <p>{impactedUsers}</p>
+          </S.RequestImpactedUsers>
         </S.RequestHeader>
 
         <S.RequestMainInfos>
-          {/* <h1>Tit amet consectetur ouos temporibus explicabo</h1>
-          <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, quos temporibus explicabo facere quia totam necessitatibus</h2> */}
+          <h1>{data.title}</h1>
+          <h2>{description}</h2>
+          <p>{data.problem}</p>
         </S.RequestMainInfos>
 
         <S.RequestDetails>
           <S.RequestStats>
-            <FiActivity />
-            <p>Aplicação parada</p>
+            <I.FiActivity />
+            <p>{status}</p>
           </S.RequestStats>
-          <S.RequestImpactedUsers>
-            <FiUsers />
-            <p></p>
-          </S.RequestImpactedUsers>
+          
           <S.RequestUser>
-            {/* <div className='user__image'><img src={UserImage} alt="" /></div> */}
-            <p></p>
+            <S.RequestUserImage>
+              <img src={UserImage} alt="" />
+            </S.RequestUserImage>
+            <p>{data.created_by.user_name}</p>
           </S.RequestUser>
         </S.RequestDetails>
 

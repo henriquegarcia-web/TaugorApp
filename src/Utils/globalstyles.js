@@ -18,9 +18,12 @@ const GlobalStyle = createGlobalStyle`
   }
 
   :root {
-    --grey-light: rgb(230, 230, 230);
+    --grey-white: rgb(230, 230, 230);
+    --grey-light: rgba(72, 94, 133, 0.8);
     --grey: #3A4D6E;
     --grey-dark: #344461;
+
+    --grey-hover: rgba(72, 94, 133, 0.05);
   }
 
   .quill-rich-text {
