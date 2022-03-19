@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as S from './style'
 import * as I from 'react-icons/fi'
 
@@ -6,33 +6,19 @@ import Request from '../../../Request'
 
 import { useView } from '../../../../../Contexts/ViewContext'
 
+import NotFoundRequest from '../../../../../Assets/NotFoundRequest.svg'
+
 const Resquests = () => {
 
-  const { showModal, view, getAllRequestsList, getMyRequestsList } = useView()
+  const { showModal, view, globalRequestList } = useView()
 
-  const [progress, setProgress] = useState({})
-  const [requestsList, setRequestsList] = useState([]);
+  const [currentRequestList, setCurrentRequestList] = useState([])
+  const [currentProgress, setCurrentProgress] = useState({})
 
   useEffect(() => {
-    setHeaderIndicators()
-  }, [view])
-  
-  const setHeaderIndicators = async () => {
-    let currentRequestList
-
-    if (view === 'all_requests') {
-      currentRequestList = await getAllRequestsList()
-    } else {
-      currentRequestList = await getMyRequestsList()
-    }
-
-    setRequestsList(currentRequestList.allRequests)
-    setProgress({
-      all: currentRequestList.progress.all.toString(),
-      finished: currentRequestList.progress.finished.toString(),
-      percentage: currentRequestList.progress.percentage.toString(),
-    })
-  }
+    setCurrentRequestList(globalRequestList.data)
+    setCurrentProgress(globalRequestList.progress)
+  }, [globalRequestList])
   
   return (
     <>
@@ -47,20 +33,20 @@ const Resquests = () => {
           </S.ProgressTitle>
 
           <S.ProgressBar>
-            {progress.finished}/{progress.all}
+            {currentProgress.finished}/{currentProgress.all}
             <S.ProgressBarContainer>
-              <S.ProgressBarFill fill={progress.percentage}></S.ProgressBarFill>
+              <S.ProgressBarFill fill={currentProgress.percentage}></S.ProgressBarFill>
             </S.ProgressBarContainer>
           </S.ProgressBar>
 
           <S.ProgressIndicators>
             <div>
-              <p>{progress.all}</p>
+              <p>{currentProgress.all}</p>
               <b>Na fila</b>
             </div>
             <div>
-              <p>{progress.finished}</p>
-              <b>{progress.finished === '1' ? 'Finalizado' : 'Finalizados'}</b>
+              <p>{currentProgress.finished}</p>
+              <b>{currentProgress.finished === '1' ? 'Finalizado' : 'Finalizados'}</b>
             </div>
           </S.ProgressIndicators>
         </S.ViewHeaderProgress>
@@ -85,11 +71,21 @@ const Resquests = () => {
           )}
         </S.ViewRequestsHeader>
         <S.ViewRequestsWrapper>
-          {requestsList && 
-            Array.from(requestsList).map((request, index) => (
+          {currentRequestList.length > 0 ? (
+            Array.from(currentRequestList).map((request, index) => (
               <Request key={index} data={request} />
             ))
-          }
+          ) : (
+            <S.ViewRequestNoRequests>
+              <img src={NotFoundRequest} alt="" />
+              
+              {view === 'all_requests' ? (
+                <p>Não há solicitações ainda</p>
+              ) : (
+                <p>Você não possuí solicitações</p>
+              )}
+            </S.ViewRequestNoRequests>
+          )}
         </S.ViewRequestsWrapper>
       </S.ViewRequests>
     </>

@@ -169,3 +169,23 @@ export const ViewRequestsWrapper = styled.div`
   padding-right: 15px;
   overflow: auto;
 `
+
+export const ViewRequestNoRequests = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+
+  img {
+    width: 100%;
+    max-width: 200px;
+    margin-bottom: 20px;
+  }
+
+  p {
+    font-size: 20px;
+    font-weight: 300;
+  }
+`

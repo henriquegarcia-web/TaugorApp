@@ -21,7 +21,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 const RequestModal = (props) => {
 
   const { getUser, setError, errorMessage } = useAuth()
-  const { requestsList, updateRequests } = useView()
+  const { updateRequests, globalRequestList } = useView()
 
   const [description, setDescription] = useState('');
   const [operationStatus, setOperationStatus] = useState('');
@@ -35,14 +35,16 @@ const RequestModal = (props) => {
 
   // ----------------------------------------------- ALERTA
 
-  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertOpen, setAlertOpen] = useState({
+    state: false,
+    type: 'success'
+  });
 
-  const handleClose = (event, reason) => {
+  const handleClose = (reason) => {
     if (reason === 'clickaway') {
       return;
     }
-
-    setAlertOpen(false);
+    setAlertOpen({ state: false, type: 'success' });
   };
 
   // ----------------------------------------------- FUNCIONAMENTO DO INPUT FILE
@@ -98,7 +100,7 @@ const RequestModal = (props) => {
     if (validationForm() && indexedFileInput) {
 
       const currentUser = getUser()
-      const requestsLength = requestsList.length
+      const requestsLength = globalRequestList.data.length
 
       await addDoc(collection(db, "requests"), {
         id: requestsLength + 1,
@@ -120,15 +122,15 @@ const RequestModal = (props) => {
         }
       })
       .then(() => {
-        setAlertOpen(true)
+        setAlertOpen({ state: true, type: 'success' })
+        updateRequests()
+        clearInputs()
+        props.onHide();
       })
       .catch((error) => {
-        console.log('Falha ao realizar requisição')
+        setAlertOpen({ state: true, type: 'error' })
+        console.log('Falha ao realizar requisição, erro:', error)
       });
-
-      updateRequests()
-      clearInputs()
-      props.onHide();
     }    
   }
 
@@ -314,8 +316,8 @@ const RequestModal = (props) => {
         </B.Modal.Footer>
       </B.Modal>
 
-      <MUI.Snackbar open={alertOpen} autoHideDuration={5000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+      <MUI.Snackbar open={alertOpen.state} autoHideDuration={5000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={alertOpen.type} sx={{ width: '100%' }}>
           Solicitação realizada com sucesso!
         </Alert>
       </MUI.Snackbar>

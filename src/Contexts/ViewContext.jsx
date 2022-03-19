@@ -13,6 +13,10 @@ const ViewProvider = ({ children }) => {
   const [modalShow, setModalShow] = React.useState(false);
 
   const [view, setView] = useState('all_requests')
+  const [globalRequestList, setGlobalRequestList] = useState({
+    data: [],
+    progress: {}
+  })
 
   const getAllRequestsList = async () => {
     let allRequestsNum
@@ -27,13 +31,14 @@ const ViewProvider = ({ children }) => {
       }
     })
 
-    const progress = ({
-      all: allRequestsNum,
-      finished: finalizedRequestsNum,
-      percentage: 100/finalizedRequestsNum
+    setGlobalRequestList({
+      data: allRequests,
+      progress: {
+        all: allRequestsNum,
+        finished: finalizedRequestsNum,
+        percentage: 100/finalizedRequestsNum
+      }
     })
-
-    return ({ progress, allRequests })
   }
 
   const getMyRequestsList = async () => {
@@ -54,13 +59,30 @@ const ViewProvider = ({ children }) => {
       }
     })
 
-    const progress = ({
-      all: myRequestsNum,
-      finished: finalizedRequestsNum,
-      percentage: 100/finalizedRequestsNum
+    setGlobalRequestList({
+      data: myRequests,
+      progress: {
+        all: myRequestsNum,
+        finished: finalizedRequestsNum,
+        percentage: 100/finalizedRequestsNum
+      }
     })
+  }
 
-    return ({ progress, allRequests: myRequests })
+  const getGlobalRequests = async () => {
+    if (view === 'all_requests') {
+      await getAllRequestsList()
+    } else {
+      await getMyRequestsList()
+    }
+  }
+
+  useEffect(() => {
+    getGlobalRequests()
+  }, [view])
+
+  const updateRequests = () => {
+    getGlobalRequests()
   }
 
   const showModal = (value) => {setModalShow(value)}
@@ -72,8 +94,8 @@ const ViewProvider = ({ children }) => {
         setView,
         showModal,
         modalShow,
-        getAllRequestsList,
-        getMyRequestsList,
+        updateRequests,
+        globalRequestList,
       }}
     >
       {children}
