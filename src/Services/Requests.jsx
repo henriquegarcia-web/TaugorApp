@@ -65,3 +65,24 @@ export const DataConverter = (string) => {
   const newString = `${day} de ${newMonth}`
   return newString
 }
+
+export const DataFilter = (data, entryText) => {
+  let results = [];
+
+  data.filter((type) => {
+    if (
+      type.id?.toString().includes(entryText.toString()) ||
+      type.created_by.user_name?.toUpperCase().includes(entryText.toUpperCase()) ||
+      type.title?.toUpperCase().includes(entryText.toUpperCase()) ||
+      type.description?.toString().includes(entryText.toString()) ||
+      type.product?.toUpperCase().includes(entryText.toUpperCase()) ||
+      type.status?.toUpperCase().includes(entryText.toUpperCase()) ||
+      type.priority?.toUpperCase().includes(entryText.toUpperCase()) ||
+      type.problem?.toString().includes(entryText.toString())
+    ) {
+      results.push(type)
+    }
+  })
+
+  return results
+}

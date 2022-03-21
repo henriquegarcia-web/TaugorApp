@@ -115,11 +115,8 @@ export const ViewHeaderCreate = styled.div`
 `
 
 export const ViewHeaderFilters = styled.div`
+  position: relative;
   width: calc(20% - 15px);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   border-radius: 8px;
   padding: 15px;
   margin-left: 15px;
@@ -142,6 +139,35 @@ export const ViewHeaderFilters = styled.div`
     font-size: 16px;
     font-weight: 400;
   }
+`
+
+export const FiltersContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+
+  p {
+    pointer-events: none;
+  }
+`
+
+export const FiltersModal = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  width: 340px;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 8px;
+
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.2);
 `
 
 export const ViewRequests = styled.div`

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as S from './style'
 import * as I from 'react-icons/fi'
@@ -7,13 +7,17 @@ import * as MUI from '@mui/material/'
 import { HandleLogout, useAuth } from '../../../Contexts/AuthContext'
 
 import UserImage from '../../../Assets/UserImage.png'
+import { useView } from '../../../Contexts/ViewContext'
 
 const Header = () => {
 
   const navigate = useNavigate()
   const { getUser } = useAuth()
+  const { handleSearchBox } = useView()
 
   const user = getUser()
+
+  const searchBoxRef = useRef()
   
   // ---------------------------------------------- FUNÇÃO DE SIGNUP
 
@@ -39,16 +43,32 @@ const Header = () => {
 
   // ----------------------------------------------
 
+  const handleSearch = (key, e) => {
+    switch (key) {
+      case 'enter':
+        if(e.key === 'Enter'){
+          handleSearchBox(searchBoxRef.current.value)
+        }
+        break;
+      case 'click':
+        handleSearchBox(searchBoxRef.current.value)
+        break;
+    
+      default: break;
+    }
+  }
+
   return (
     <S.HeaderContainer>
 
       <S.HeaderSearch>
         <S.HeaderSearchInput 
+          ref={searchBoxRef}
           type="text"
           placeholder='Procure por palavras-chaves ...'
-          onChange={() => {}}
+          onKeyPress={(e) => {handleSearch('enter', e)}}
         />
-        <I.FiSearch />
+        <I.FiSearch onClick={(e) => {handleSearch('click', e)}} />
       </S.HeaderSearch>
 
       <S.HeaderUserInfo onClick={handleClick}>

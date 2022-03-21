@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { GetRequestsList, GetUser } from "../firebase";
+import { DataFilter } from "../Services/Requests";
 
 export const ViewContext = createContext();
 
@@ -19,6 +20,8 @@ const ViewProvider = ({ children }) => {
     progress: {}
   })
 
+  const [searchText, setSearchText] = useState('')
+
   const getAllRequestsList = async () => {
     let allRequestsNum
     let finalizedRequestsNum = 0
@@ -32,8 +35,10 @@ const ViewProvider = ({ children }) => {
       }
     })
 
+    const filteredRequests = DataFilter(allRequests, searchText)
+
     setGlobalRequestList({
-      data: allRequests,
+      data: filteredRequests,
       progress: {
         all: allRequestsNum,
         finished: finalizedRequestsNum,
@@ -60,8 +65,10 @@ const ViewProvider = ({ children }) => {
       }
     })
 
+    const filteredRequests = DataFilter(allRequests, searchText)
+
     setGlobalRequestList({
-      data: myRequests,
+      data: filteredRequests,
       progress: {
         all: myRequestsNum,
         finished: finalizedRequestsNum,
@@ -80,7 +87,7 @@ const ViewProvider = ({ children }) => {
 
   useEffect(() => {
     getGlobalRequests()
-  }, [view])
+  }, [view, searchText])
 
   const updateRequests = () => {
     getGlobalRequests()
@@ -99,6 +106,10 @@ const ViewProvider = ({ children }) => {
     }
   }
 
+  const handleSearchBox = (text) => {
+    setSearchText(text)
+  }
+
   return (
     <ViewContext.Provider
       value={{
@@ -109,6 +120,7 @@ const ViewProvider = ({ children }) => {
         modalEditShow,
         updateRequests,
         globalRequestList,
+        handleSearchBox,
       }}
     >
       {children}

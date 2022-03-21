@@ -140,7 +140,7 @@ const EditRequestModal = (props) => {
               marginLeft: '15px',
             }}
           >
-            Escluir solicitação
+            Excluir solicitação
           </MUI.Button>
         </B.Modal.Header>
 

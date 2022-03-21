@@ -45,7 +45,7 @@ const Request = ({ data }) => {
 
         <S.RequestMainInfos>
           <h1>{data.title}</h1>
-          <h2>{description}</h2>
+          <h2><Markup content={description} /></h2>
           <p>{data.problem}</p>
         </S.RequestMainInfos>
 
