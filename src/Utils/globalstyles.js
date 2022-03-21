@@ -31,6 +31,10 @@ const GlobalStyle = createGlobalStyle`
     margin-bottom: 42px;
   }
 
+  .modal-header .btn-close {
+    margin-left: 10px;
+  }
+
   // ------ SCROLL BAR
 
   /* width */
@@ -68,7 +72,7 @@ export const AuthErrorMessage = styled.div`
   font-size: 300;
   text-align: right;
   margin-bottom: ${props => props.margin};
-  height: 20px;
+  height: 15px;
   line-height: 14px;
 
   color: red;

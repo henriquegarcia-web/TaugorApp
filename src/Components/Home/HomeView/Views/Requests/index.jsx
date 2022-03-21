@@ -51,7 +51,7 @@ const Resquests = () => {
           </S.ProgressIndicators>
         </S.ViewHeaderProgress>
 
-        <S.ViewHeaderCreate onClick={() => showModal(true)}>
+        <S.ViewHeaderCreate onClick={() => showModal('create', true)}>
           <I.FiPlusCircle />
           <p>Criar Solicitação</p>
         </S.ViewHeaderCreate>

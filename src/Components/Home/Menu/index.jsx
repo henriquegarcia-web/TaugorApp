@@ -26,7 +26,7 @@ const Menu = () => {
           <S.MenuNavBarItemText><b>Minhas</b> Solicitações</S.MenuNavBarItemText>
         </S.MenuNavBarItem>
 
-        <S.MenuNavBarItem onClick={() => showModal(true)}>
+        <S.MenuNavBarItem onClick={() => showModal('create', true)}>
           <I.FiPlusCircle />
           <S.MenuNavBarItemText><b>Criar</b> Solicitação</S.MenuNavBarItemText>
         </S.MenuNavBarItem>

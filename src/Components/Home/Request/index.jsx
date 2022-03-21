@@ -2,41 +2,25 @@ import React from 'react'
 import * as S from './style'
 import * as I from 'react-icons/fi'
 
+import { Markup } from 'interweave';
+
 import UserImage from '../../../Assets/UserImage.png'
+
+import { useView } from '../../../Contexts/ViewContext'
+import { ReturnImpactedUsers, ReturnPriority, ReturnStatus } from '../../../Services/Requests';
 
 const Request = ({ data }) => {
 
+  const { showModal } = useView()
+
   var description = data.description.replace(/<[^>]+>/g, '');
 
-  const status = ( data.status === 'pendente'
-    ? 'Pendente'
-    : data.status === 'em_andamento'
-    ? 'Em andamento'
-    : data.status === 'finalizado'
-    ? 'Finalizada'
-    : 'Operação parada'
-  )
-
-  const priority = ( data.priority === 'baixa'
-    ? 'Baixa'
-    : data.priority === 'media'
-    ? 'Média'
-    : 'Alta'
-  )
-
-  const impactedUsers = ( data.impacted_users === 1
-    ? 'Apenas 1'
-    : data.impacted_users === 2
-    ? '1 a 10 usuários'
-    : data.impacted_users === 3
-    ? '11 a 30 usuários'
-    : data.impacted_users === 4
-    ? '31 a 50 usuários'
-    : 'Mais de 50 usuários'
-  )
+  const status = ReturnStatus(data.status)
+  const priority = ReturnPriority(data.priority)
+  const impactedUsers = ReturnImpactedUsers(data.impacted_users)
 
   return (
-    <S.Request>
+    <S.Request onClick={() => showModal('edit', true, data)}>
 
       <S.ResquestIdentifier>
         <p>Request #{data.id}</p>

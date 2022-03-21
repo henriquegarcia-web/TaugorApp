@@ -10,7 +10,8 @@ export function useView() {
 
 const ViewProvider = ({ children }) => {
 
-  const [modalShow, setModalShow] = React.useState(false);
+  const [modalCreateShow, setModalCreateShow] = React.useState(false);
+  const [modalEditShow, setModalEditShow] = React.useState(false);
 
   const [view, setView] = useState('all_requests')
   const [globalRequestList, setGlobalRequestList] = useState({
@@ -36,7 +37,7 @@ const ViewProvider = ({ children }) => {
       progress: {
         all: allRequestsNum,
         finished: finalizedRequestsNum,
-        percentage: 100/finalizedRequestsNum
+        percentage: (finalizedRequestsNum/allRequestsNum * 100).toString()
       }
     })
   }
@@ -64,7 +65,7 @@ const ViewProvider = ({ children }) => {
       progress: {
         all: myRequestsNum,
         finished: finalizedRequestsNum,
-        percentage: 100/finalizedRequestsNum
+        percentage: (finalizedRequestsNum/myRequestsNum * 100).toString()
       }
     })
   }
@@ -85,7 +86,18 @@ const ViewProvider = ({ children }) => {
     getGlobalRequests()
   }
 
-  const showModal = (value) => {setModalShow(value)}
+  const showModal = (type, value, data) => {
+    switch (type) {
+      case 'create':
+        setModalCreateShow(value)
+        break;
+      case 'edit':
+        setModalEditShow({ value, data })
+        break;
+
+      default: break;
+    }
+  }
 
   return (
     <ViewContext.Provider
@@ -93,7 +105,8 @@ const ViewProvider = ({ children }) => {
         view,
         setView,
         showModal,
-        modalShow,
+        modalCreateShow,
+        modalEditShow,
         updateRequests,
         globalRequestList,
       }}

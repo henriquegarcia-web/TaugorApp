@@ -7,18 +7,18 @@ import * as I from 'react-icons/fi'
 import MuiAlert from '@mui/material/Alert';
 import ReactQuill from 'react-quill';
 
-import { addDoc, collection } from 'firebase/firestore'
+import { addDoc, collection, doc, documentId, Timestamp } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { db, storage } from '../../../firebase'
-import { useAuth } from '../../../Contexts/AuthContext'
-import { AuthErrorMessage } from '../../../Utils/globalstyles'
-import { useView } from '../../../Contexts/ViewContext'
+import { db, storage } from '../../../../firebase'
+import { useAuth } from '../../../../Contexts/AuthContext'
+import { AuthErrorMessage } from '../../../../Utils/globalstyles'
+import { useView } from '../../../../Contexts/ViewContext'
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const RequestModal = (props) => {
+const CreateRequestModal = (props) => {
 
   const { getUser, setError, errorMessage } = useAuth()
   const { updateRequests, globalRequestList } = useView()
@@ -102,6 +102,12 @@ const RequestModal = (props) => {
       const currentUser = getUser()
       const requestsLength = globalRequestList.data.length
 
+      // function getRandomInt(min, max) {
+      //   min = Math.ceil(min);
+      //   max = Math.floor(max);
+      //   return Math.floor(Math.random() * (max - min)) + min;
+      // }
+
       await addDoc(collection(db, "requests"), {
         id: requestsLength + 1,
         created_by: {
@@ -116,10 +122,8 @@ const RequestModal = (props) => {
         problem: requestProblemRef.current.value,
         impacted_users: impactedUsers,
         file: indexedFileInput,
-        edit_history: {
-          created_at: new Date(),
-          update_at: ''
-        }
+        created_at: Timestamp.fromDate(new Date()),
+        update_at: ''
       })
       .then(() => {
         setAlertOpen({ state: true, type: 'success' })
@@ -157,7 +161,6 @@ const RequestModal = (props) => {
             size="small"
             fullWidth
             style={{
-              marginTop: '10px',
               marginBottom: '20px',
             }}
           />
@@ -318,11 +321,15 @@ const RequestModal = (props) => {
 
       <MUI.Snackbar open={alertOpen.state} autoHideDuration={5000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={alertOpen.type} sx={{ width: '100%' }}>
-          Solicitação realizada com sucesso!
+          {alertOpen.type === 'success' ? (
+            'Ação realizada com sucesso!'
+          ) : (
+            'Erro na solicitação'
+          )}
         </Alert>
       </MUI.Snackbar>
     </>
   );
 }
 
-export default RequestModal
+export default CreateRequestModal

@@ -3,14 +3,14 @@ import * as S from './style'
 
 import HomeView from '../../Components/Home/HomeView'
 import Menu from '../../Components/Home/Menu'
-import RequestModal from '../../Components/Auth/RequestModal'
+import CreateRequestModal from '../../Components/Home/Modals/CreateRequest'
+import EditRequestModal from '../../Components/Home/Modals/EditRequest'
 
-import { ViewContext } from '../../Contexts/ViewContext'
+import { useView } from '../../Contexts/ViewContext'
 
 const Home = () => {
   
-  const viewContext = useContext(ViewContext)
-  const { showModal, modalShow } = viewContext
+  const { showModal, modalCreateShow, modalEditShow } = useView()
 
   return (
     <>
@@ -19,9 +19,15 @@ const Home = () => {
         <HomeView />
       </S.HomeContainer>
 
-      <RequestModal
-        show={modalShow}
-        onHide={() => showModal(false)}
+      <CreateRequestModal
+        show={modalCreateShow}
+        onHide={() => showModal('create', false)}
+      />
+
+      <EditRequestModal
+        show={modalEditShow.value}
+        data={modalEditShow.data}
+        onHide={() => showModal('edit', false)}
       />
     </>
   )

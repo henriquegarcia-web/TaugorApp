@@ -51,7 +51,7 @@ export const ProgressBarFill = styled.div`
   position: absolute;
   left: 0;
   top: 0;
-  width: ${props => props.fill}px;
+  width: ${props => props.fill}%;
   height: 100%;
   background: var(--grey-light);
 `
