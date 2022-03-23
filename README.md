@@ -1,5 +1,5 @@
 ## Teste Taugor
-#### Corretor de Criptomoedas
+#### Portal de Relacionamento
 
 > Desenvolvedor: Henrique P. Garcia <br>
 > Link da aplicação: <https://taugorapp-db.web.app/>
